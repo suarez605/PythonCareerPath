@@ -92,9 +92,13 @@ funcion_externa()
 
 
 # k DUDA
-
-a = []
+import sys
+a = [1, 2, 3]
+for x in list(locals()):
+    print(x)
+sys.getrefcount(a)
 a = 0
+sys.getrefcount(a)
 
 
 # l 
