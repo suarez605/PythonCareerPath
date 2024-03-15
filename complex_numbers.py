@@ -90,6 +90,30 @@ def generate_mandelbrot_image(width, height, max_iterations):
             image[i, j] = color
     return image
 
-image = generate_mandelbrot_image(1000, 1000, 100)
-plt.imshow(image, cmap='gray')
-plt.show()
+#image = generate_mandelbrot_image(1000, 1000, 100)
+#plt.imshow(image, cmap='gray')
+#plt.show()
+
+def generate_mandelbrot_different_center(width, height, max_iter, center=-0.833+0.215j, zoom=1):
+    iterations_matrix = np.zeros((height, width), dtype=np.int32)
+    real_range = zoom * 2
+    imag_range = zoom * 2
+    step_x = real_range / width
+    step_y = imag_range / height
+    start_real = center.real - (real_range / 2)
+    start_imag = center.imag + (imag_range / 2)
+    
+    for y in range(height):
+        for x in range(width):
+            c = complex(start_real + x * step_x, start_imag - y * step_y)
+            iterations_matrix[y, x] = mandelbrot(c, max_iter)
+    norm_iterations_matrix = (255 * iterations_matrix / np.max(iterations_matrix)).astype(np.uint8)
+    plt.imshow(norm_iterations_matrix, cmap='gray', extent=[start_real, start_real + real_range, start_imag - imag_range, start_imag])
+    plt.colorbar()
+    plt.title('Mandelbrot Set')
+    plt.xlabel('Real')
+    plt.ylabel('Imaginary')
+    plt.savefig('mandelbrot.png')
+    plt.show()
+
+generate_mandelbrot_different_center(5000, 5000, 200, center=-0.833+0.215j, zoom=0.05)
